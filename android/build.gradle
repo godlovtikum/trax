@@ -1,0 +1,50 @@
+buildscript {
+    ext {
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 35
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.1.21"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
+
+/**
+ * Extra repositories shared by every subproject (the app and every autolinked
+ * native module).
+ *
+ * The `com.facebook.react.rootproject` plugin applied above already injects
+ * the standard set (google(), mavenCentral(), JitPack, RN snapshots) into
+ * every subproject's repository list, which is why react-native-gesture-handler,
+ * reanimated, screens, svg, keychain, linear-gradient and friends all resolve
+ * cleanly.
+ *
+ * @notifee/react-native is the exception. It does not publish `app.notifee:core`
+ * to any public Maven repository; the AAR ships locally inside the npm package
+ * at `node_modules/@notifee/react-native/android/libs/`. Without registering
+ * that directory as a Maven repo here, `:notifee_react-native`'s declaration
+ * `implementation "app.notifee:core:+"` fails with:
+ *   "Could not find any matches for app.notifee:core:+ as no versions of
+ *    app.notifee:core are available."
+ *
+ * This is documented in Notifee's official Android install guide:
+ *   https://notifee.app/react-native/docs/installation
+ */
+allprojects {
+    repositories {
+        maven {
+            url "$rootDir/../node_modules/@notifee/react-native/android/libs"
+        }
+    }
+}

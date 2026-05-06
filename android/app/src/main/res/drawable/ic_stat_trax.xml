@@ -1,0 +1,31 @@
+<!--
+    Status-bar / notification icon for TraX.
+
+    Android renders notification small icons as a flat alpha mask: every
+    non-transparent pixel becomes the system tint colour. To avoid the
+    "solid white square" fallback you must:
+
+      • Use only white (#FFFFFFFF) fills with alpha for shape.
+      • Keep all artwork inside the inner 18dp safe zone (the spec gives
+        a 24dp canvas with 3dp padding on each edge).
+
+    Glyph: a stylised "T" inside a rounded square — matches the TraX brand
+    mark while staying legible at 18x18 px.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Rounded square frame (alpha for soft outline) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillAlpha="0.35"
+        android:pathData="M5,4 H19 A2,2 0 0 1 21,6 V18 A2,2 0 0 1 19,20 H5 A2,2 0 0 1 3,18 V6 A2,2 0 0 1 5,4 Z M5,5.5 A0.5,0.5 0 0 0 4.5,6 V18 A0.5,0.5 0 0 0 5,18.5 H19 A0.5,0.5 0 0 0 19.5,18 V6 A0.5,0.5 0 0 0 19,5.5 Z" />
+
+    <!-- "T" glyph: top crossbar + stem -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M7.5,7.5 H16.5 V9.5 H13 V16.5 H11 V9.5 H7.5 Z" />
+</vector>

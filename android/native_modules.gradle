@@ -1,0 +1,27 @@
+// Local no-op shim for legacy CI inspectors that look for an explicit
+// `native_modules.gradle` apply line in settings.gradle (or app/build.gradle).
+//
+// Background:
+//   Up to @react-native-community/cli-platform-android v13 the package shipped
+//   a `native_modules.gradle` script at:
+//     node_modules/@react-native-community/cli-platform-android/native_modules.gradle
+//   which exposed two helpers:
+//     ext.applyNativeModulesSettingsGradle(settings)
+//     ext.applyNativeModulesAppBuildGradle(project)
+//
+//   Starting with v15 (the only version compatible with RN 0.81) that file
+//   was removed. Autolinking is now performed by the React Native Gradle
+//   Plugin via `autolinkLibrariesFromCommand()`, which is wired up in
+//   settings.gradle.
+//
+// What this shim does:
+//   Nothing. All real autolinking happens in `autolinkLibrariesFromCommand()`.
+//   This file exists solely so that `apply from: file("native_modules.gradle")`
+//   resolves to a real script and the build is not broken by inspectors that
+//   require the apply line to be present.
+//
+// Do NOT add `include ':some-module'` or `applyNativeModulesAppBuildGradle`
+// calls here — doing so would double-register every native module and cause
+// "Project ':...' is already defined" failures during Gradle configuration.
+
+logger.lifecycle("[trax] native_modules.gradle shim applied (real autolinking is handled by autolinkLibrariesFromCommand)")

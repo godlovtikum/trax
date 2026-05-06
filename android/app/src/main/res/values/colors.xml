@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Notification accent colour. Applied by Android (and by Notifee
+        when no per-notification color is supplied) as the background for
+        the small icon and the highlight bar in the expanded notification
+        layout. Matches the TraX brand blue used in the splash and the
+        top-of-app primary surfaces.
+    -->
+    <color name="notification_accent">#1A56DB</color>
+</resources>

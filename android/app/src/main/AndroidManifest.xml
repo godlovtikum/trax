@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Network access for API calls -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Push notifications (required on Android 13 / API 33+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Exact alarm scheduling for notification reminders -->
+    <!-- Android 12 (API 31+): SCHEDULE_EXACT_ALARM  -->
+    <!-- Android 13 (API 33+): USE_EXACT_ALARM (no user prompt needed) -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
+    <!-- Wake device to deliver a scheduled notification -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Re-schedule notifications after device reboot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Haptic feedback via Vibration API -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".MainApplication"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="false"
+        android:theme="@style/AppTheme"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
+
+            <!-- Standard launcher intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+                HTTPS deep links from the TraX Finance marketing site.
+                android:autoVerify="true" asks the OS to verify the
+                Digital Asset Links file at:
+                  https://trax-finance.netlify.app/.well-known/assetlinks.json
+                After verification the OS opens these URLs directly in the
+                app without the disambiguation dialog.
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="trax-finance.netlify.app" />
+            </intent-filter>
+
+            <!--
+                Custom URI scheme — trax:// — used for in-app deep links
+                such as trax://add (open Add Transaction) and
+                trax://dashboard (open Settings tab). These work
+                regardless of App Link verification status.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="trax" />
+            </intent-filter>
+
+        </activity>
+
+        <!--
+            Default notification icon + accent color.
+
+            These meta-data tags are read by Notifee (and any FCM-style
+            messaging library that lands here later) when a notification
+            payload doesn't specify smallIcon / color explicitly. Without
+            them Android falls back to the launcher icon which renders as
+            a solid white square in the status bar from API 21+.
+
+            ic_stat_trax is a monochrome (white-on-transparent) vector
+            drawable — see res/drawable/ic_stat_trax.xml.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_trax" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_accent" />
+
+        <!--
+            @notifee/react-native automatically merges its own receivers and
+            services via its AAR manifest when you run `npm install`.
+            No manual receiver declarations are needed here.
+        -->
+
+    </application>
+
+</manifest>
